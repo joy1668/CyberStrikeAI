@@ -1,0 +1,57 @@
+# 版本控制与 CI
+.git
+.gitignore
+.github
+
+# 本地运行时数据（容器内由数据卷提供）
+data/
+chat_uploads/
+tmp/
+temp/
+log/
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+
+# 本地配置与密钥
+config.yaml
+config.local.yaml
+*.backup
+.env
+.env.*
+*.pem
+*.key
+*.crt
+.upgrade-backup/
+
+# 运行时产物
+skills/.eino/
+.upgrade-backup/
+.update-*
+cyberstrike-ai
+cyberstrike-ai.exe
+*.test
+bin/
+dist/
+build/
+.build/
+target/
+coverage.out
+coverage.html
+
+# Python / Node 本地环境
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+node_modules/
+
+# 文档与编辑器
+docs/
+images/
+node_modules/
+.DS_Store
+.idea/
+.vscode/

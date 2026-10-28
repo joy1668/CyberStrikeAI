@@ -1,0 +1,24 @@
+services:
+  cyberstrike-ai:
+    build:
+      context: .
+      args:
+        GOPROXY: ${GOPROXY:-https://proxy.golang.org,direct}
+    image: cyberstrike-ai:latest
+    container_name: cyberstrike-ai
+    restart: unless-stopped
+    ports:
+      - "${CSAI_PORT:-8080}:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      # 默认走明文 HTTP，便于反代和本地调试；需要自签 HTTPS 时设为 0
+      TZ: ${TZ:-UTC}
+    # 默认配置里 tls_enabled: true，容器内用 --http 更省事
+    command: ["--http"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
