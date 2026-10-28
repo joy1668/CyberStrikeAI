@@ -132,7 +132,10 @@ jobs:
           docker exec csai sh -c 'test -x /app/cyberstrike-ai'
           # 服务进程必须以非 root 运行；docker exec 本身是 root，故检查 PID 1 的 UID
           docker exec csai sh -c 'grep "^Uid:" /proc/1/status | grep -qw 10001'
-          curl -fsS http://127.0.0.1:18080/ | grep -qi '<html'
+          # 先落盘再匹配：curl 直接管道给 grep -q 时，grep 提前退出会让 curl 收到
+          # SIGPIPE 并以 exit 23 结束，在 pipefail 下会误判为失败。
+          curl -fsS http://127.0.0.1:18080/ -o "$RUNNER_TEMP/index.html"
+          grep -qi '<html' "$RUNNER_TEMP/index.html"
       - name: Dump logs on failure
         if: failure()
         run: docker logs csai || true
